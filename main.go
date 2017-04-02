@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
-	"log/syslog"
 	"os"
 	"os/signal"
 	"sort"
@@ -15,28 +13,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/iam"
-	"gopkg.in/yaml.v2"
 )
 
 const (
 	exitCodeOk    int = 0
 	exitCodeError int = 1
-
-	configFile string = "/etc/aws-iam-authorizedkeys.yaml"
 )
 
 var (
-	cfg    config
-	sysLog syslog.Writer
-	wg     sync.WaitGroup
+	wg sync.WaitGroup
 )
-
-type config struct {
-	Allowed struct {
-		Users  []string
-		Groups []string
-	}
-}
 
 func init() {
 	// Exit normally if OpenSSH sees a matching key and no longer requires our
@@ -47,29 +33,6 @@ func init() {
 		_ = <-signals
 		os.Exit(exitCodeOk)
 	}()
-
-	// Prepare syslog
-	sysLog, err := syslog.New(syslog.LOG_NOTICE|syslog.LOG_AUTH,
-		"aws-iam-authorizedkeys")
-
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Could not connect to syslog")
-		os.Exit(exitCodeError)
-	}
-	log.SetOutput(sysLog)
-
-	// Read configuration file
-	if y, err := ioutil.ReadFile(configFile); err == nil {
-		err := yaml.Unmarshal(y, &cfg)
-
-		if err != nil {
-			log.Println(err)
-			os.Exit(exitCodeError)
-		}
-
-		sort.Strings(cfg.Allowed.Users)
-		sort.Strings(cfg.Allowed.Groups)
-	}
 }
 
 func main() {
