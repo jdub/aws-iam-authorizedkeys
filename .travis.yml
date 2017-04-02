@@ -11,11 +11,10 @@ cache:
     - $GOPATH/src
     - $GOPATH/pkg
 
-after_success:
-  - go build -v -o $HOME/aws-iam-authorizedkeys_linux_amd64
-
 before_cache:
-  - rm -rf $GOPATH/src/github.com/jdub/aws-iam-authorizedkeys
+  - go build -v -o $HOME/aws-iam-authorizedkeys_linux_amd64
+  - rm -rf $GOPATH/src/github.com/jdub/aws-iam-authorizedkeys/*
+  - rm -rf $GOPATH/pkg/**/github.com/jdub/aws-iam-authorizedkeys
 
 deploy:
   provider: releases
