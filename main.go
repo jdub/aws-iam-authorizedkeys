@@ -26,8 +26,9 @@ const (
 )
 
 var (
-	cfg Config
-	wg  sync.WaitGroup
+	cfg    Config
+	sysLog syslog.Writer
+	wg     sync.WaitGroup
 )
 
 type Config struct {
@@ -48,14 +49,14 @@ func init() {
 	}()
 
 	// Prepare syslog
-	logwriter, err := syslog.New(syslog.LOG_NOTICE|syslog.LOG_AUTH,
+	sysLog, err := syslog.New(syslog.LOG_NOTICE|syslog.LOG_AUTH,
 		"aws-iam-authorizedkeys")
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Could not connect to syslog")
 		os.Exit(exitCodeError)
 	}
-	log.SetOutput(logwriter)
+	log.SetOutput(sysLog)
 
 	// Read configuration file
 	if y, err := ioutil.ReadFile(configFile); err == nil {
