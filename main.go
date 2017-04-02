@@ -26,12 +26,12 @@ const (
 )
 
 var (
-	cfg    Config
+	cfg    config
 	sysLog syslog.Writer
 	wg     sync.WaitGroup
 )
 
-type Config struct {
+type config struct {
 	Allowed struct {
 		Users  []string
 		Groups []string
