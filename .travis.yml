@@ -11,12 +11,16 @@ cache:
     - $GOPATH/src
     - $GOPATH/pkg
 
+after_success:
+  - go build -v -o aws-iam-authorizedkeys_linux_amd64
+
 deploy:
   provider: releases
   api_key:
     secure: IwFuIYYz9IOQlVUy2TZV4CBIb4Ns82UBgVOTbZyRsjUToZWxHxgkpxb8c5c6tvp2Z3pK4NoU2YQx9XEIR2UEYk/hPqr0t58Z50UFBT/hh3eOjOGNpoo0G0UvZcS/Ko+Qr5IVYUxA6FBA7sPpEvSLpEoHPrD1WhPcauq7y0iwPhk1FRaqtboSRlFrqOxFH6LzKXe80McveUrgu4wnaSZQ6AMJtKacHzsRCSa8L40/z/+KrTjJsCSIuXZzVwAokd0cuFD/3/9VbnaAPBZAQDnd0kAZ+BnmfhDgekTb9EYvln4DdMtoaKj1i8E9lfVlrM2fcbwJrQWSVY0jcaIfCtQ5gXnQxIUgVvSS2y+2LQxIn/+Wx2ZqPHifu7tLQVkwsh8M5Tr/5f7boXMRZxBlxx7w+KSbwKcYXna0du2Mq4599iaDGwCA7Dn2gUfL3+LNW3dhsRh+cIrlQQyPh6Rhx005WGZLr0nRYN0El6hVeCBWWVbNpOc/BAYnaG3iUghzP2mj4dWe+LNMd8J693FcOZ1VMDv3QIDnZoUlKjmjlAWwRYjzUZAAzulyopyjbLzZ0NPJ5G0EAO5lUqYzTZABkkGrPbiS87TUxGCvkJj5j/3OyMp2tl0uBPsaMjT3dJ7810wfLG9JwhXdEjBPT1M7hR8F+gGn78ofdqlXhD17IrpNtHw=
   skip_cleanup: true
-  file: aws-iam-authorizedkeys
+  file:
+    - aws-iam-authorizedkeys_linux_amd64
   on:
     repo: jdub/aws-iam-authorizedkeys
     tags: true
