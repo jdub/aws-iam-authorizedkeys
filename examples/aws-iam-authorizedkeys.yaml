@@ -1,0 +1,12 @@
+allowed:
+  users:
+    - alice
+    - bob
+  groups:
+    - Administrators
+
+map:
+  groups:
+    Administrators:
+      - sudo
+      - adm
