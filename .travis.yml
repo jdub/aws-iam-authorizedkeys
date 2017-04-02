@@ -6,6 +6,11 @@ language: go
 go:
   - 1.8.x
 
+cache:
+  directories:
+    - $GOPATH/src
+    - $GOPATH/pkg
+
 deploy:
   provider: releases
   api_key:
@@ -15,4 +20,8 @@ deploy:
   on:
     repo: jdub/aws-iam-authorizedkeys
     tags: true
-    go: 1.8.x
+    go: '1.8'
+
+notifications:
+  email:
+    on_success: never
