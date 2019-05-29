@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"log/syslog"
 	"os"
 	"os/signal"
 	"sort"
@@ -25,6 +26,15 @@ var (
 )
 
 func init() {
+	logwriter, err := syslog.New(syslog.LOG_NOTICE|syslog.LOG_AUTH,
+		"aws-iam-authorizedkeys")
+
+	if err != nil {
+		log.SetOutput(os.Stderr)
+	} else {
+		log.SetOutput(logwriter)
+	}
+
 	// Exit normally if OpenSSH sees a matching key and no longer requires our
 	// services
 	signals := make(chan os.Signal, 1)
@@ -46,6 +56,8 @@ func main() {
 
 	userName := os.Args[1]
 	allowed := true
+
+	log.Println(userName)
 
 	// If we have a user whitelist, check it
 	if len(cfg.Allowed.Users) > 0 {

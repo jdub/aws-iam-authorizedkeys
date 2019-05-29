@@ -2,8 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
-	"os"
 	"sort"
 
 	"gopkg.in/yaml.v2"
@@ -26,11 +24,9 @@ var (
 
 func init() {
 	if y, err := ioutil.ReadFile(configFile); err == nil {
-		err := yaml.Unmarshal(y, &cfg)
-
-		if err != nil {
-			log.Println(err)
-			os.Exit(exitCodeError)
+		if err := yaml.Unmarshal(y, &cfg); err != nil {
+			cfg = config{}
+			return
 		}
 
 		sort.Strings(cfg.Allowed.Users)
